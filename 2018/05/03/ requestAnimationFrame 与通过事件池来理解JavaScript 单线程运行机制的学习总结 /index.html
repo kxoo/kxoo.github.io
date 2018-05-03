@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="Cache-Control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>Hello World · Kxoo 的博客记录</title>
+    <title>requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结 · Kxoo 的博客记录</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -181,7 +181,7 @@
                 <a href="/" >Kxoo 的博客记录</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">Hello World</a>
+                <a href="#" class="post-name">requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结</a>
             </div>
     </div>
     
@@ -213,7 +213,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            Hello World
+            requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结
             <!-- 404 -->
             
         </h1>
@@ -229,9 +229,15 @@ height:50vh;
         
             <!-- 文章页标签  -->
             
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "requestAnimationFrame, JavaScript, 单线程">requestAnimationFrame, JavaScript, 单线程</a>
+    
+</div>
+            
             <div class="post-intro-meta">
                 <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                <span class="post-intro-time">2018/05/02</span>
+                <span class="post-intro-time">2018/05/03</span>
                 
                 <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                     <span class="iconfont-archer">&#xe602;</span>
@@ -337,23 +343,54 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <h1 id="requestAnimationFrame-与通过事件池来理解JavaScript-单线程运行机制的学习总结"><a href="#requestAnimationFrame-与通过事件池来理解JavaScript-单线程运行机制的学习总结" class="headerlink" title="requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结"></a>requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结</h1><p>##首先提及进程与线程的关系  </p>
+<pre><code>* 进程是CPU资源分配的最小单位（拥有资源能够独立运行）
+* 每一个进程之间相互独立
+*线程是cpu调度的最小单位
+*线程是建立在进程的基础上的程序运行单位，一个进程中可以有多个线程
+</code></pre><p>##JavaScript运行相关的四个线程<br>    <em>GUi渲染线程<br>        解析HTML CSS 建立DOM树 RenderObject 树，生成布局（回流）以及重绘
+    </em>JavaScript引擎线程<br>        解析JavaScript脚本， 每一个Tab页只有一个JS线程<br>        和渲染线程互斥，执行时间过长会导致渲染加载阻塞<br>    <em>定时触发器线程<br>        定时器的计数是由单独的线程来负责，避免单线程的JavaScript 引擎线程阻塞导致的计数延迟甚至不进行。
+    </em>事件触发线程<br>        控制事件循环，一旦触发相应事件，便将事件添加到队列<br>    *HTTP请求线程<br>        在XMLHttpRequest在连接后是通过浏览器新开一个线程请求将检测到状态变更时，如果设置有回调函数，异步线程就产生状态变更事件，将这个回调再放入事件队列中。再由JavaScript引擎执行。</p>
+<p>##明确上面的概念后，我们要知道</p>
+<pre><code>* 一般同步任务都在主线程上执行，形成一个执行栈，顺序依次执行
+* 事件触发线程管理着一个任务队列，只要异步任务（触发事件）有了运行结果，就在任务队列之中放置一个事件。
+* 一旦执行栈中的执行栈中任务执行完毕（JavaScript 引擎空闲），JavaScript 引擎线程读取任务队列，将可运行的异步任务添加到可执行栈中，开始执行。
+</code></pre><p>##requestAnimationFrame</p>
+<pre><code>*先简单理解为一个16ms的定时函数*
+当你的JavaScript 代码执行到这里的时候，触发定时触发器线程，开始计数，与此同时JavaScript
+线程继续向下执行。计时完成后添加到JavaScript 事件队列中进行排队。也就是说明记时完成后并不会迅速执行。
+</code></pre><p><strong>不过相比于setTimeout 它有更多的优点</strong></p>
+<p>###来看MDN的解释<br>    &gt;window.requestAnimationFrame() 方法告诉浏览器您希望执行动画并请求浏览器在下一次重绘之前调用指定的函数来更新动画。该方法使用一个回调函数作为参数，这个回调函数会在浏览器重绘之前调用。</p>
+<p>###值得注意的是<br>    回调的次数通常是每秒60次，但大多数浏览器通常匹配 W3C 所建议的刷新频率。在大多数浏览器里，当运行在后台标签页或者隐藏的<iframe> 里时，requestAnimationFrame() 会暂停调用以<strong>提升性能和电池寿命</strong>。</iframe></p>
+<p>##最后解决一下部分兼容性问题<br>`<br>// requestAnimationFrame polyfill by Erik Möller.<br>// Fixes from Paul Irish, Tino Zijdel, Andrew Mao, Klemen Slavič, Darius Bacon<br>// MIT license<br>if (!Date.now)<br>    Date.now = function() { return new Date().getTime(); };</p>
+<p>(function() {<br>    ‘use strict’;</p>
+<pre><code>var vendors = [&apos;webkit&apos;, &apos;moz&apos;];
+for (var i = 0; i &lt; vendors.length &amp;&amp; !window.requestAnimationFrame; ++i) {
+    var vp = vendors[i];
+    window.requestAnimationFrame = window[vp+&apos;RequestAnimationFrame&apos;];
+    window.cancelAnimationFrame = (window[vp+&apos;CancelAnimationFrame&apos;]
+                               || window[vp+&apos;CancelRequestAnimationFrame&apos;]);
+}
+if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) // iOS6 is buggy
+    || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
+    var lastTime = 0;//初始时间为零， 第一次nextTime 取now
+    window.requestAnimationFrame = function(callback) {//返回一个setTimeout函数接受执行回调函数
+        var now = Date.now();
+        var nextTime = Math.max(lastTime + 16, now);//从当前时间和最后一次刷新的时间比较取最大
+        return setTimeout(function() { callback(lastTime = nextTime); },//保存nextTime的值
+                          nextTime - now);//执行时间是&apos;现在&apos; or 16ms 后
+    };
+    window.cancelAnimationFrame = clearTimeout;
+}
+</code></pre><p>}());<br>`</p>
 
     </article>
     <!-- license  -->
     
         <div class="license-wrapper">
             <p>原文作者: <a href="http://yoursite.com">ZKB</a>
-            <p>原文链接: <a href="http://yoursite.com/2018/05/02/hello-world/">http://yoursite.com/2018/05/02/hello-world/</a>
-            <p>发表日期: <a href="http://yoursite.com/2018/05/02/hello-world/">May 2nd 2018, 4:46:36</a>
+            <p>原文链接: <a href="http://yoursite.com/2018/05/03/ requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结 /">http://yoursite.com/2018/05/03/ requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结 /</a>
+            <p>发表日期: <a href="http://yoursite.com/2018/05/03/ requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结 /">May 3rd 2018, 7:23:00</a>
             <p>版权声明: 本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -469,7 +506,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#requestAnimationFrame-与通过事件池来理解JavaScript-单线程运行机制的学习总结"><span class="toc-number">1.</span> <span class="toc-text">requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -505,13 +542,15 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/02</span><a class="archive-post-title" href= "/2018/05/02/hello-world/" >Hello World</a>
+            <span class="archive-post-date">05/03</span><a class="archive-post-title" href= "/2018/05/03/ requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结 /" >requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结</a>
         </li>
     
     </div>
   </div>
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="requestAnimationFrame, JavaScript, 单线程"><span class="iconfont-archer">&#xe606;</span>requestAnimationFrame, JavaScript, 单线程</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
