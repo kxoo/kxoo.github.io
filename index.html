@@ -311,12 +311,14 @@ height:50vh;
             </a>
             <div class="abstract-content">
                 requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结##首先提及进程与线程的关系  
-* 进程是CPU资源分配的最小单位（拥有资源能够独立运行）
-* 每一个进程之间相互独立
-*线程是cpu调度的最小单位
-*线程是建立在进程的基础上的程序运行单位，一个进程中可以有多个线程
-##JavaScript运行相关的四个线程    GUi渲染线程        解析HTML CSS 建立DOM树 RenderObject 树，生成布局（回流）以及重绘
-    JavaScript引擎线程        解析JavaScript脚本， 每一个Ta...
+- 进程是CPU资源分配的最小单位（拥有资源能够独立运行）
+- 每一个进程之间相互独立
+- 线程是cpu调度的最小单位
+- 线程是建立在进程的基础上的程序运行单位，一个进程中可以有多个线程
+##JavaScript运行相关的四个线程
+
+GUi渲染线程  解析HTML CSS 建立DOM树 RenderObject 树，生成布局（回流）以及重绘
+JavaScript引擎线程  解析JavaScript脚本， 每一个Tab页只有一个JS线程  和渲染线...
             </div>
             <div class="abstract-post-meta">
                 <!-- date  -->
