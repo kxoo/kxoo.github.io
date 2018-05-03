@@ -359,13 +359,13 @@ height:50vh;
 <h2 id="明确上面的概念后，我们要知道"><a href="#明确上面的概念后，我们要知道" class="headerlink" title="明确上面的概念后，我们要知道"></a>明确上面的概念后，我们要知道</h2><ul>
 <li>一般同步任务都在主线程上执行，形成一个执行栈，顺序依次执行</li>
 <li>事件触发线程管理着一个任务队列，只要异步任务（触发事件）有了运行结果，就在任务队列之中放置一个事件。</li>
-<li>一旦执行栈中的执行栈中任务执行完毕（JavaScript 引擎空闲），JavaScript 引擎线程读取任务队列，将可运行的异步任务添加到可执行栈中，开始执行。<br>![流程图]（./source/page1.png）<h2 id="requestAnimationFrame"><a href="#requestAnimationFrame" class="headerlink" title="requestAnimationFrame"></a>requestAnimationFrame</h2><strong> 先简单理解为一个16ms的定时函数 </strong><br>当你的JavaScript 代码执行到这里的时候，触发定时触发器线程，开始计数，与此同时JavaScript<br>线程继续向下执行。计时完成后添加到JavaScript 事件队列中进行排队。也就是说明记时完成后并不会迅速执行。</li>
+<li>一旦执行栈中的执行栈中任务执行完毕（JavaScript 引擎空闲），JavaScript 引擎线程读取任务队列，将可运行的异步任务添加到可执行栈中，开始执行。<h2 id="requestAnimationFrame"><a href="#requestAnimationFrame" class="headerlink" title="requestAnimationFrame"></a>requestAnimationFrame</h2><strong> 先简单理解为一个16ms的定时函数 </strong><br>当你的JavaScript 代码执行到这里的时候，触发定时触发器线程，开始计数，与此同时JavaScript<br>线程继续向下执行。计时完成后添加到JavaScript 事件队列中进行排队。也就是说明记时完成后并不会迅速执行。</li>
 </ul>
 <p><strong>不过相比于setTimeout 它有更多的优点</strong></p>
 <h3 id="来看MDN的解释"><a href="#来看MDN的解释" class="headerlink" title="来看MDN的解释"></a>来看MDN的解释</h3><blockquote>
 <p>window.requestAnimationFrame() 方法告诉浏览器您希望执行动画并请求浏览器在下一次重绘之前调用指定的函数来更新动画。该方法使用一个回调函数作为参数，这个回调函数会在浏览器重绘之前调用。</p>
 </blockquote>
-<h3 id="值得注意的是"><a href="#值得注意的是" class="headerlink" title="值得注意的是"></a>值得注意的是</h3><p>回调的次数通常是每秒60次，但大多数浏览器通常匹配 W3C 所建议的刷新频率。在大多数浏览器里，当运行在后台标签页或者隐藏的\<iframe>\ 里时，requestAnimationFrame() 会暂停调用以 <strong>提升性能和电池寿命</strong> 。</iframe></p>
+<h3 id="值得注意的是"><a href="#值得注意的是" class="headerlink" title="值得注意的是"></a>值得注意的是</h3><p>回调的次数通常是每秒60次，但大多数浏览器通常匹配 W3C 所建议的刷新频率。在大多数浏览器里，当运行在后台标签页或者隐藏的&lt;iframe&gt;  里时，requestAnimationFrame() 会暂停调用以 <strong>提升性能和电池寿命</strong> 。</p>
 <h2 id="最后解决一下部分兼容性问题"><a href="#最后解决一下部分兼容性问题" class="headerlink" title="最后解决一下部分兼容性问题"></a>最后解决一下部分兼容性问题</h2><p>// requestAnimationFrame polyfill by Erik Möller.<br>// Fixes from Paul Irish, Tino Zijdel, Andrew Mao, Klemen Slavič, Darius Bacon<br>// MIT license</p>
 <pre><code>if (!Date.now)
     Date.now = function() {
