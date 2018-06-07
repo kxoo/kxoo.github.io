@@ -290,7 +290,32 @@
     
     
         <article class="index-post">
-            <a class="abstract-title" href = "/2018/05/03/ requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结 /" >
+            <a class="abstract-title" href = "/2018/05/20/定时器/" >
+                
+                    <span>[Untitled Post]</span>
+            </a>
+            <div class="abstract-content">
+                倒计时问题 面试题
+文章说明了解决问题的两种方法 setInterval setTimeOut(有一个很基础的坑)
+
+要点首先注意到JavaScript 是单线程的，倒计时可以说一定会因为线程阻塞而有延迟不准确。
+解决方案通过获取标准时间差值做一个间隔时间判断，大于间隔时间立即执行，不再做多余等待，防止累加，小于就和间隔时间相减，作为新的间隔时间。
+详细过程123456789101112131415161718192021222324var  startTime = new Date().getTime();//输入参数为倒计时时间function Start(ms)&#123;  co...
+            </div>
+            <div class="abstract-post-meta">
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/05/20</span>
+                </div>
+                <!-- tags  -->
+                
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
+            <a class="abstract-title" href = "/2018/05/03/requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结 /" >
                 
                     <span>requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结</span>
             </a>
@@ -419,7 +444,14 @@ JavaScript引擎线程  解析JavaScript脚本， 每一个Tab页只有一个JS�
     
     
     
-    <div class="total-archive"> Total : 1 </div>
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 2 </div>
     
     <div class="post-archive">
     
@@ -431,7 +463,12 @@ JavaScript引擎线程  解析JavaScript脚本， 每一个Tab页只有一个JS�
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/03</span><a class="archive-post-title" href= "/2018/05/03/ requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结 /" >requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结</a>
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2018/05/20/定时器/" >[Untitled Post]</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/03</span><a class="archive-post-title" href= "/2018/05/03/requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结 /" >requestAnimationFrame 与通过事件池来理解JavaScript 单线程运行机制的学习总结</a>
         </li>
     
     </div>
